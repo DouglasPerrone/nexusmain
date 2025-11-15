@@ -7,13 +7,13 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Briefcase, FileWarning, PlusCircle, ArrowLeft, FileDown } from 'lucide-react';
-import type { Vacancy } from '@/lib/types';
+import type { JobPosting } from '@/lib/types';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import { getVacancies, deleteVacancy } from '@/lib/vacancy-service';
+import { getJobs, deleteJob } from '@/lib/vacancy-service';
 import { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { GeneralReport } from "@/components/admin/general-report";
@@ -21,14 +21,14 @@ import { GeneralReport } from "@/components/admin/general-report";
 export default function ManageVacanciesPage() {
   const { toast } = useToast();
   const router = useRouter();
-  const [vacancies, setVacancies] = useState<Vacancy[]>([]);
+  const [vacancies, setVacancies] = useState<JobPosting[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [reportData, setReportData] = useState<any>(null);
 
   useEffect(() => {
     try {
-      const allVacancies = getVacancies(true);
+      const allVacancies = getJobs(true);
       setVacancies(allVacancies);
     } catch(e) {
       if (e instanceof Error) {
@@ -43,7 +43,7 @@ export default function ManageVacanciesPage() {
     if (!confirm('Tem a certeza que deseja excluir esta vaga? Esta ação não pode ser desfeita.')) return;
 
     try {
-        deleteVacancy(vacancyId);
+        deleteJob(vacancyId);
         setVacancies(vacs => vacs.filter(v => v.id !== vacancyId));
         toast({
             title: 'Vaga Excluída!',

@@ -129,7 +129,15 @@ export const useFirebase = (): FirebaseServicesAndUser => {
   }
 
   if (!context.areServicesAvailable || !context.firebaseApp || !context.firestore || !context.auth || !context.storage) {
-    throw new Error('Firebase core services not available. Check FirebaseProvider props.');
+    return {
+      firebaseApp: null as any,
+      firestore: null as any,
+      auth: null as any,
+      storage: null as any,
+      user: context.user,
+      isUserLoading: context.isUserLoading,
+      userError: context.userError,
+    };
   }
 
   return {

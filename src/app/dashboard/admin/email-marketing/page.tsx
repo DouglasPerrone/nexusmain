@@ -14,14 +14,14 @@ import { Loader2, Wand2, ArrowLeft, Mail, Image as ImageIcon, Text, Send, Eye, C
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { generateEmailCampaignAction } from '@/app/actions';
-import type { EmailCampaignContent, Course, Vacancy, UserProfile } from '@/lib/types';
+import type { EmailCampaignContent, Course, JobPosting, UserProfile } from '@/lib/types';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { getTemplates, type EmailTemplate } from '@/lib/email-templates';
 import { users as allUsers } from '@/lib/users';
 import { getCourses, getCourseCategories } from '@/lib/course-service';
-import { getVacancies } from '@/lib/vacancy-service';
+import { getJobs } from '@/lib/vacancy-service';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -58,7 +58,7 @@ export default function EmailMarketingPage() {
   const templates = getTemplates();
   const [audienceCount, setAudienceCount] = useState(0);
   const [courses, setCourses] = useState<Course[]>([]);
-  const [vacancies, setVacancies] = useState<Vacancy[]>([]);
+  const [vacancies, setVacancies] = useState<JobPosting[]>([]);
   const [functionalAreas, setFunctionalAreas] = useState<string[]>([]);
 
 
@@ -95,7 +95,7 @@ export default function EmailMarketingPage() {
 
   useEffect(() => {
     setCourses(getCourses());
-    setVacancies(getVacancies(true));
+    setVacancies(getJobs(true));
     const allAreas = [...new Set(allUsers.map(u => u.functionalArea).filter(Boolean))];
     setFunctionalAreas(allAreas as string[]);
   }, []);

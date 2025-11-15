@@ -20,8 +20,8 @@ import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 import { format, parseISO } from 'date-fns';
 import { pt } from 'date-fns/locale';
-import { getVacancyById, updateVacancy } from '@/lib/vacancy-service';
-import type { Vacancy } from '@/lib/types';
+import { getJobById, updateJob } from '@/lib/vacancy-service';
+import type { JobPosting } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Timestamp } from 'firebase/firestore';
 
@@ -48,7 +48,7 @@ export default function EditVacancyPage() {
   const params = useParams();
   const vacancyId = Array.isArray(params.id) ? params.id[0] : params.id;
   
-  const [vacancy, setVacancy] = useState<Vacancy | null | undefined>(undefined);
+  const [vacancy, setVacancy] = useState<JobPosting | null | undefined>(undefined);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   
@@ -74,7 +74,7 @@ export default function EditVacancyPage() {
 
   useEffect(() => {
     if (vacancyId) {
-      const foundVacancy = getVacancyById(vacancyId as string);
+      const foundVacancy = getJobById(vacancyId as string);
       setVacancy(foundVacancy); 
     }
   }, [vacancyId]);
@@ -114,7 +114,7 @@ export default function EditVacancyPage() {
         return;
     }
 
-    const vacancyDataToUpdate: Partial<Vacancy> = {
+    const vacancyDataToUpdate: Partial<JobPosting> = {
         ...vacancy,
         ...data,
         responsibilities: data.responsibilities.split('\n').filter(r => r.trim() !== ''),
@@ -123,7 +123,7 @@ export default function EditVacancyPage() {
     };
 
     try {
-        updateVacancy(vacancyId as string, vacancyDataToUpdate);
+        updateJob(vacancyId as string, vacancyDataToUpdate);
         toast({
           title: "Vaga Atualizada!",
           description: "As alterações na vaga foram guardadas com sucesso.",
@@ -288,7 +288,7 @@ export default function EditVacancyPage() {
                 <FormField control={form.control} name="salaryRange" render={({ field }) => (<FormItem><FormLabel>Salário Oferecido</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField control={form.control} name="showSalary" render={({ field }) => (<FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm mt-6"><div className="space-y-0.5"><FormLabel>Mostrar Salário</FormLabel></div><FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl></FormItem>)} />
               </div>
-              <FormField control={form.control} name="closingDate" render={({ field }) => (<FormItem className="flex flex-col"><FormLabel>Data Limite</FormLabel><Popover><PopoverTrigger asChild><FormControl><Button variant={"outline"} className={cn("w-[240px] pl-3 text-left font-normal", !field.value && "text-muted-foreground")}><>{field.value ? format(field.value, "PPP", { locale: pt }) : <span>Escolha uma data</span>}<CalendarIcon className="ml-auto h-4 w-4 opacity-50" /></Button></FormControl></PopoverTrigger><PopoverContent className="w-auto p-0" align="start"><Calendar mode="single" selected={field.value} onSelect={field.onChange} disabled={(date) => date < new Date("1900-01-01")} initialFocus /></PopoverContent></Popover><FormMessage /></FormItem>)} />
+              <FormField control={form.control} name="closingDate" render={({ field }) => (<FormItem className="flex flex-col"><FormLabel>Data Limite</FormLabel><Popover><PopoverTrigger asChild><FormControl><Button variant={"outline"} className={cn("w-[240px] pl-3 text-left font-normal", !field.value && "text-muted-foreground")}>{field.value ? format(field.value, "PPP", { locale: pt }) : <span>Escolha uma data</span>}<CalendarIcon className="ml-auto h-4 w-4 opacity-50" /></Button></FormControl></PopoverTrigger><PopoverContent className="w-auto p-0" align="start"><Calendar mode="single" selected={field.value} onSelect={field.onChange} disabled={(date) => date < new Date("1900-01-01")} initialFocus /></PopoverContent></Popover><FormMessage /></FormItem>)} />
               
               <div className="border-t pt-6">
                 <Button type="submit" disabled={isSubmitting} className="w-full">

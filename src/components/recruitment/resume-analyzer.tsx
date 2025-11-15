@@ -5,8 +5,8 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { analyzeResumeAction } from '@/app/actions';
-import { getVacancies } from '@/lib/vacancy-service';
-import type { Vacancy } from '@/lib/types';
+import { getJobs } from '@/lib/vacancy-service';
+import type { JobPosting } from '@/lib/types';
 import type { AIResumeAnalysisOutput } from '@/lib/schemas';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -52,13 +52,13 @@ const fileToDataUri = (file: File) => new Promise<string>((resolve, reject) => {
 export function ResumeAnalyzer() {
   const [analysisResults, setAnalysisResults] = useState<AnalysisResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [vacancies, setVacancies] = useState<Vacancy[]>([]);
+  const [vacancies, setVacancies] = useState<JobPosting[]>([]);
   const [selectedCandidates, setSelectedCandidates] = useState<string[]>([]);
   const { toast } = useToast();
   const router = useRouter();
 
   useEffect(() => {
-    setVacancies(getVacancies());
+    setVacancies(getJobs());
   }, []);
 
   const form = useForm<FormValues>({

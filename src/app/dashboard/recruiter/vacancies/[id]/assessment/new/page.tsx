@@ -11,9 +11,9 @@ import { Input } from '@/components/ui/input';
 import { Loader2, Wand2, ArrowLeft, Save, Bot } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { generateAssessmentTestAction } from '@/app/actions';
-import type { AssessmentTest, Vacancy } from '@/lib/types';
+import type { AssessmentTest, JobPosting } from '@/lib/types';
 import { useRouter, useParams, notFound } from 'next/navigation';
-import { getVacancyById } from '@/lib/vacancy-service';
+import { getJobById } from '@/lib/vacancy-service';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -27,7 +27,7 @@ type FormValues = z.infer<typeof GenerateAssessmentTestInputSchema>;
 export default function NewAssessmentPage() {
   const params = useParams();
   const vacancyId = Array.isArray(params.id) ? params.id[0] : params.id;
-  const [vacancy, setVacancy] = useState<Vacancy | null | undefined>(undefined);
+  const [vacancy, setVacancy] = useState<JobPosting | null | undefined>(undefined);
   const [generatedTest, setGeneratedTest] = useState<Omit<AssessmentTest, 'vacancyId'> | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -47,7 +47,7 @@ export default function NewAssessmentPage() {
 
   useEffect(() => {
     if (vacancyId) {
-      const foundVacancy = getVacancyById(vacancyId);
+      const foundVacancy = getJobById(vacancyId);
       setVacancy(foundVacancy);
       if (foundVacancy) {
          const fullJobDescription = `${foundVacancy.title}\n\n${foundVacancy.description}\n\nResponsabilidades:\n${foundVacancy.responsibilities.join('\n')}\n\nRequisitos:\n${foundVacancy.requirements.join('\n')}`;

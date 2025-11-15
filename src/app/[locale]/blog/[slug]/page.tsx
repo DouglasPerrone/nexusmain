@@ -1,5 +1,4 @@
-'use client';
-import { notFound, useParams } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { blogPosts, type BlogPost } from '@/lib/blog-posts';
@@ -12,7 +11,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { format, parseISO } from 'date-fns';
 import { pt } from 'date-fns/locale';
 import { BlogPostCard } from '@/components/blog/blog-post-card';
-import { useEffect, useState } from 'react';
 import { type Metadata } from 'next';
 
 // This function now runs on the server

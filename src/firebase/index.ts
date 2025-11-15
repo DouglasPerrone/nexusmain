@@ -8,6 +8,9 @@ import { getStorage } from "firebase/storage";
 
 // IMPORTANT: DO NOT MODIFY THIS FUNCTION
 export function initializeFirebase() {
+  if (typeof window === 'undefined') {
+    return getSdks((null as any));
+  }
   if (!getApps().length) {
     // Important! initializeApp() is called without any arguments because Firebase App Hosting
     // integrates with the initializeApp() function to provide the environment variables needed to
@@ -30,10 +33,18 @@ export function initializeFirebase() {
   }
 
   // If already initialized, return the SDKs with the already initialized App
-  return getSdks(getApp());
+    return getSdks(getApp());
 }
 
-export function getSdks(firebaseApp: FirebaseApp) {
+export function getSdks(firebaseApp: FirebaseApp | null) {
+  if (!firebaseApp) {
+    return {
+      firebaseApp: null as any,
+      auth: null as any,
+      firestore: null as any,
+      storage: null as any,
+    };
+  }
   return {
     firebaseApp,
     auth: getAuth(firebaseApp),

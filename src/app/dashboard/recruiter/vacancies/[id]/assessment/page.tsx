@@ -6,9 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, PlusCircle, ClipboardCheck, Users, BarChart, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { getVacancyById } from '@/lib/vacancy-service';
-import { getTestsForVacancy, deleteTest } from '@/lib/test-service';
-import type { Vacancy, AssessmentTest } from '@/lib/types';
+import { getJobById } from '@/lib/vacancy-service';
+import { getTestsForJob, deleteTest } from '@/lib/test-service';
+import type { JobPosting, AssessmentTest } from '@/lib/types';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -29,15 +29,15 @@ export default function ManageAssessmentsPage() {
   const { toast } = useToast();
   const vacancyId = Array.isArray(params.id) ? params.id[0] : params.id;
   
-  const [vacancy, setVacancy] = useState<Vacancy | null | undefined>(undefined);
+  const [vacancy, setVacancy] = useState<JobPosting | null | undefined>(undefined);
   const [tests, setTests] = useState<AssessmentTest[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [testToDelete, setTestToDelete] = useState<AssessmentTest | null>(null);
 
   useEffect(() => {
     if (vacancyId) {
-      const foundVacancy = getVacancyById(vacancyId);
-      const foundTests = getTestsForVacancy(vacancyId);
+      const foundVacancy = getJobById(vacancyId);
+      const foundTests = getTestsForJob(vacancyId);
       setVacancy(foundVacancy);
       setTests(foundTests);
       setIsLoading(false);

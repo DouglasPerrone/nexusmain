@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Loader2, Wand2, CalendarIcon, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { generateVacancyContentAction } from '@/app/actions';
+import { generateJobContentAction } from '@/app/actions';
 import type { GenerateVacancyContentOutput } from '@/ai/flows/generate-vacancy-content';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/firebase';
@@ -23,7 +23,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { pt } from 'date-fns/locale';
-import { addVacancy } from '@/lib/vacancy-service';
+import { addJob } from '@/lib/vacancy-service';
 import type { Vacancy, EducationLevel } from '@/lib/types';
 
 
@@ -88,7 +88,7 @@ export default function NewVacancyPage() {
     setIsGenerating(true);
     setGeneratedContent(null);
     try {
-      const result = await generateVacancyContentAction({title: data.title, category: data.category, industry: data.industry, minExperience: data.minExperience, demandLevel: data.demandLevel });
+      const result = await generateJobContentAction({title: data.title, category: data.category, industry: data.industry, minExperience: data.minExperience, demandLevel: data.demandLevel });
       setGeneratedContent(result);
     } catch (error) {
       toast({
@@ -143,7 +143,7 @@ export default function NewVacancyPage() {
     }
 
     try {
-        addVacancy(newVacancy);
+        addJob(newVacancy);
         toast({
           title: "Vaga publicada!",
           description: "A sua vaga foi publicada e já está visível para os candidatos.",
